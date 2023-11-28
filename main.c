@@ -9,8 +9,6 @@ Title : main.c
 #include "board.h"
 #include "move.h"
 
-int tour = 0;
-
 int main()
 {
     int** board = boardInit();
