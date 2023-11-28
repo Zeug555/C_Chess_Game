@@ -10,44 +10,113 @@ Title: move.c
 bool pieceMovement(int** boardIn, int xIn, int yIn, int xOut, int yOut)
 {
     bool moveVerif;
-    int currentPiece = boardIn[xIn][yIn];
+    int currentPiece = boardIn[yIn][xIn];
 
     switch (currentPiece)
     {
         case W_PAWN:
-            moveVerif = movementPawn(boardIn, xIn, yIn, xOut, yOut, 0);
-            break;
         case B_PAWN:
-            moveVerif = movementPawn(boardIn, xIn, yIn, xOut, yOut, 1);
+            moveVerif = movementPawn(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
             break;
             
         default:
+            moveVerif = false;
             break;
     }
 
     return moveVerif;
 }
 
-bool validDemand(int xIn, int yIn, int xOut, int yOut)
+bool validDemand(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
 {
+    // Board limits verification
     if((xOut>7)||(yOut>7)||(xOut<0)||(yOut<0))
-    {
         return false;
-    }
-    
     else if((xIn>7)||(yIn>7)||(xIn<0)||(yIn<0))
-    {
         return false;
-    }
+
+    // Friend smash verification
+    if(boardIn[yOut][xOut]%2 == side)
+        return false;
 
     return true;
 }
 
+bool lineMoveVerif(int** boardIn, int xIn, int yIn, int xOut, int yOut)
+{
+    int distanceX = xOut - xIn;
+    int distanceY = yOut - yIn;
+
+    // If the player wants to move the piece on the x line
+    if (yIn == yOut)
+    {
+        // Want to move on the right
+        if (distanceX > 0)
+        {
+            for (int i = xIn + 1; i < xOut; ++i)
+            {
+                if (boardIn[yOut][i] != HOLLOW)
+                {
+                    printf("There is a piece in the path of your X move\n");
+                    return false;
+                }
+            }
+            return true;
+        }
+        // Want to move on the left
+        else if (distanceX < 0)
+        {
+            for (int i = xIn - 1; i > xOut; --i)
+            {
+                if (boardIn[yOut][i] != HOLLOW)
+                {
+                    printf("There is a piece in the path of your X move\n");
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+    // If the player wants to move the rook on the y line
+    else if (xIn == xOut)
+    {
+        // Want to move down
+        if (distanceY > 0)
+        {
+            for (int i = yIn + 1; i < yOut; ++i)
+            {
+                if (boardIn[i][xOut] != HOLLOW)
+                {
+                    printf("There is a piece in the path of your Y move\n");
+                    return false;
+                }
+            }
+            return true;
+        }
+        // Want to move up
+        else if (distanceY < 0)
+        {
+            for (int i = yIn - 1; i > yOut; --i)
+            {
+                if (boardIn[i][xOut] != HOLLOW)
+                {
+                    printf("There is a piece in the path of your Y move\n");
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    printf("You tried to move from (%d,%d) to (%d,%d), it is not possible with your piece.\n", xIn, yIn, xOut, yOut);
+    return false;
+}
+
 bool movementPawn(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
 {
-    if(!validDemand(xIn, yIn, xOut, yOut))
+    if(!validDemand(boardIn, xIn, yIn, xOut, yOut, side))
     {
-        printf("Your move is out of the board\n");
+        printf("Your request is impossible.\n");
         return false;
     }
 
@@ -56,7 +125,8 @@ bool movementPawn(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
     {
         int distanceX = xOut - xIn;
         int distanceY = yOut - yIn;
-            
+
+        // Pawn transformation into Queen at the end of the board  
         if((distanceX==0)&&(distanceY == 1)&&(yOut==7)&&(boardIn[yOut][xOut]==0))
         {
             boardIn[yOut][xOut] = B_QUEEN;
@@ -64,6 +134,7 @@ bool movementPawn(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
             return true;
         }
 
+        // Pawn basic movement
         else if((distanceX==0)&&(distanceY == 1)&&(boardIn[yOut][xOut]==0))
         {
             boardIn[yOut][xOut] = boardIn[yIn][xIn];
@@ -71,6 +142,7 @@ bool movementPawn(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
             return true;
         }
 
+        // Pawn start movement
         else if((distanceX==0)&&(distanceY == 2)&&(yIn==1)&&(boardIn[yOut][xOut]==0))
         {
             boardIn[yOut][xOut] = boardIn[yIn][xIn];
@@ -78,6 +150,7 @@ bool movementPawn(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
             return true;
         }
 
+        // Pawn which strike an other enemy piece
         else if((distanceY == 1)&&((distanceX == 1)||(distanceX == -1))&&(boardIn[yOut][xOut]!=0)&&(boardIn[yOut][xOut]%2==1))
         {
             boardIn[yOut][xOut] = boardIn[yIn][xIn];
@@ -94,6 +167,7 @@ bool movementPawn(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
     int distanceX = xIn - xOut;
     int distanceY = yIn - yOut;
     
+    // Pawn transformation into Queen at the end of the board  
     if((distanceX==0)&&(distanceY == 1)&&(yOut==0)&&(boardIn[yOut][xOut]==0))
     {
         boardIn[yOut][xOut] = W_QUEEN;
@@ -101,6 +175,7 @@ bool movementPawn(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
         return true;
     }
 
+    // Pawn basic movement
     else if((distanceX==0)&&(distanceY == 1)&&(boardIn[yOut][xOut]==0))
     {
         boardIn[yOut][xOut] = boardIn[yIn][xIn];
@@ -108,6 +183,7 @@ bool movementPawn(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
         return true;
     }
 
+    // Pawn start movement
     else if((distanceX==0)&&(distanceY == 2)&&(yIn==6)&&(boardIn[yOut][xOut]==0))
     {
         boardIn[yOut][xOut] = boardIn[yIn][xIn];
@@ -115,6 +191,7 @@ bool movementPawn(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
         return true;
     }
 
+    // Pawn which strike an other enemy piece
     else if((distanceY == 1)&&((distanceX == 1)||(distanceX == -1))&&(boardIn[yOut][xOut]!=0)&&(boardIn[yOut][xOut]%2==0))
     {
         boardIn[yOut][xOut] = boardIn[yIn][xIn];
@@ -123,16 +200,23 @@ bool movementPawn(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
     }
 
     printf("You tried to move from (%d,%d) to (%d,%d), it is not possible with a pawn.\n", xIn, yIn, xOut, yOut);
-
     return false; // if none of theses case is triggered
 }
 
 bool movementRook(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
 {
-    if(!validDemand(xIn, yIn, xOut, yOut))
+    if(!validDemand(boardIn, xIn, yIn, xOut, yOut, side))
     {
-        printf("Your move is out of the board\n");
+        printf("Your request is impossible.\n");
         return false;
     }
 
+    if(lineMoveVerif(boardIn, xIn, yIn, xOut, yOut) == true)
+    {
+        boardIn[yOut][xOut] = boardIn[yIn][xIn];
+        boardIn[yIn][xIn] = HOLLOW;
+        return true;
+    }
+    return false;
 }
+

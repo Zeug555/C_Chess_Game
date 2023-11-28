@@ -10,10 +10,15 @@ Title: move.h
 #include <stdbool.h>
 #include "board.h"
 
+// Global pieces gestion
 bool pieceMovement(int** boardIn, int xIn, int yIn, int xOut, int yOut);
 
-bool validDemand(int xIn, int yIn, int xOut, int yOut);
+// Manage weird players things
+bool validDemand(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side);
+bool lineMoveVerif(int** boardIn, int xIn, int yIn, int xOut, int yOut);
+bool diagMoveVerif(int** boardIn, int xIn, int yIn, int xOut, int yOut);
 
+// Manage specific pieces
 bool movementPawn(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side);
 bool movementRook(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side);
 bool movementBishop(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side);

@@ -28,7 +28,5 @@ Title : init.h
 #define W_KING 12
 
 // ------- Function declaration ------- //
-
-
 int** boardInit(); 
 void boardPrint();
