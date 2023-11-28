@@ -10,7 +10,7 @@ Title: move.c
 bool pieceMovement(int** boardIn, int xIn, int yIn, int xOut, int yOut)
 {
     bool moveVerif;
-    int currentPiece = boardIn[xIn][yIn];
+    int currentPiece = boardIn[yIn][xIn];
 
     switch (currentPiece)
     {
@@ -47,73 +47,62 @@ bool lineMoveVerif(int** boardIn, int xIn, int yIn, int xOut, int yOut)
     int distanceX = xOut - xIn;
     int distanceY = yOut - yIn;
 
-    // If the player want to move the piece on the x line
-    if(yIn == yOut)
+    // If the player wants to move the piece on the x line
+    if (yIn == yOut)
     {
         // Want to move on the right
-        if(distanceX > 0)
+        if (distanceX > 0)
         {
-            int i = xIn;
-            while(i<xOut)
+            for (int i = xIn + 1; i < xOut; ++i)
             {
-                if((boardIn[yOut][i]==HOLLOW)&&(i!=xIn)&&(i!=xOut))
+                if (boardIn[yOut][i] != HOLLOW)
                 {
-                    printf("There is a piece in the path of your move\n");
+                    printf("There is a piece in the path of your X move\n");
                     return false;
                 }
-                i++;
             }
             return true;
         }
-
         // Want to move on the left
         else if (distanceX < 0)
         {
-            int i = xOut;
-            while(i<xIn)
+            for (int i = xIn - 1; i > xOut; --i)
             {
-                if((boardIn[yOut][i]==HOLLOW)&&(i!=xIn)&&(i!=xOut))
+                if (boardIn[yOut][i] != HOLLOW)
                 {
-                    printf("There is a piece in the path of your move\n");
+                    printf("There is a piece in the path of your X move\n");
                     return false;
                 }
-                i++;
             }
             return true;
         }
     }
-
-    // If the player want to move the rook on the y line
+    // If the player wants to move the rook on the y line
     else if (xIn == xOut)
     {
         // Want to move down
-        if(distanceY > 0)
+        if (distanceY > 0)
         {
-            int i = yIn;
-            while(i<yOut)
+            for (int i = yIn + 1; i < yOut; ++i)
             {
-                if((boardIn[i][xOut]==HOLLOW)&&(i!=yIn)&&(i!=yOut))
+                if (boardIn[i][xOut] != HOLLOW)
                 {
-                    printf("There is a piece in the path of your move\n");
+                    printf("There is a piece in the path of your Y move\n");
                     return false;
                 }
-                i++;
             }
             return true;
         }
-
         // Want to move up
         else if (distanceY < 0)
         {
-            int i = yOut;
-            while(i<yIn)
+            for (int i = yIn - 1; i > yOut; --i)
             {
-                if((boardIn[i][xOut]==HOLLOW)&&(i!=yIn)&&(i!=yOut))
+                if (boardIn[i][xOut] != HOLLOW)
                 {
-                    printf("There is a piece in the path of your move\n");
+                    printf("There is a piece in the path of your Y move\n");
                     return false;
                 }
-                i++;
             }
             return true;
         }
