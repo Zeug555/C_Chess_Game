@@ -18,7 +18,15 @@ bool pieceMovement(int** boardIn, int xIn, int yIn, int xOut, int yOut)
         case B_PAWN:
             moveVerif = movementPawn(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
             break;
-            
+
+        case W_ROOK:
+        case B_ROOK:
+            moveVerif = movementRook(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
+        
+        case W_KNIGHT:
+        case B_KNIGHT:
+            moveVerif = movementKnight(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
+
         default:
             moveVerif = false;
             break;
@@ -220,3 +228,23 @@ bool movementRook(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
     return false;
 }
 
+bool movementKnight(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
+{
+    if(!validDemand(boardIn, xIn, yIn, xOut, yOut, side))
+    {
+        printf("Your request is impossible.\n");
+        return false;
+    }
+
+    int distanceX = abs(xIn - xOut);
+    int distanceY = abs(yIn - yOut);
+
+    if ((distanceX == 1 && distanceY == 2) || (distanceX == 2 && distanceY == 1))
+    {
+        boardIn[yOut][xOut] = boardIn[yIn][xIn];
+        boardIn[yIn][xIn] = HOLLOW;
+        return true;
+    }
+
+    return false;
+}
