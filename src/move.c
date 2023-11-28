@@ -50,6 +50,7 @@ bool lineMoveVerif(int** boardIn, int xIn, int yIn, int xOut, int yOut)
     // If the player want to move the piece on the x line
     if(yIn == yOut)
     {
+        // Want to move on the right
         if(distanceX > 0)
         {
             int i = xIn;
@@ -65,6 +66,7 @@ bool lineMoveVerif(int** boardIn, int xIn, int yIn, int xOut, int yOut)
             return true;
         }
 
+        // Want to move on the left
         else if (distanceX < 0)
         {
             int i = xOut;
@@ -84,6 +86,7 @@ bool lineMoveVerif(int** boardIn, int xIn, int yIn, int xOut, int yOut)
     // If the player want to move the rook on the y line
     else if (xIn == xOut)
     {
+        // Want to move down
         if(distanceY > 0)
         {
             int i = yIn;
@@ -99,6 +102,7 @@ bool lineMoveVerif(int** boardIn, int xIn, int yIn, int xOut, int yOut)
             return true;
         }
 
+        // Want to move up
         else if (distanceY < 0)
         {
             int i = yOut;
@@ -218,14 +222,12 @@ bool movementRook(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
         return false;
     }
 
-    // --- Black Side ---
-    if(side==1)
+    if(lineMoveVerif(boardIn, xIn, yIn, xOut, yOut) == true)
     {
-        if(lineMoveVerif(boardIn, xIn, yIn, xOut, yOut) == true)
-        {
-
-        }
+        boardIn[yOut][xOut] = boardIn[yIn][xIn];
+        boardIn[yIn][xIn] = HOLLOW;
+        return true;
     }
-
-    // --- White Side ---
+    return false;
 }
+
