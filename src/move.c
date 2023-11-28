@@ -219,6 +219,7 @@ bool movementRook(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
         return false;
     }
 
+    // Check if you have a piece in your path
     if(lineMoveVerif(boardIn, xIn, yIn, xOut, yOut) == true)
     {
         boardIn[yOut][xOut] = boardIn[yIn][xIn];
@@ -241,6 +242,7 @@ bool movementKnight(int** boardIn, int xIn, int yIn, int xOut, int yOut, int sid
     int distanceX = abs(xIn - xOut);
     int distanceY = abs(yIn - yOut);
 
+    // Is your movement into your range of action ?
     if ((distanceX == 1 && distanceY == 2) || (distanceX == 2 && distanceY == 1))
     {
         boardIn[yOut][xOut] = boardIn[yIn][xIn];
@@ -263,6 +265,7 @@ bool movementKing(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
     int distanceX = abs(xIn - xOut);
     int distanceY = abs(yIn - yOut);
 
+    // Is your movement into your range of action ?
     if (distanceX <= 1 && distanceY <= 1)
     {
         boardIn[yOut][xOut] = boardIn[yIn][xIn];
