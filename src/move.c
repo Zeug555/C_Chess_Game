@@ -23,9 +23,17 @@ bool pieceMovement(int** boardIn, int xIn, int yIn, int xOut, int yOut)
         case B_ROOK:
             moveVerif = movementRook(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
         
+        case W_BISHOP:
+        case B_BISHOP:
+            moveVerif = movementBishop(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
+
         case W_KNIGHT:
         case B_KNIGHT:
             moveVerif = movementKnight(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
+
+        case W_KING:
+        case B_KING:
+            moveVerif = movementKing(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
 
         default:
             moveVerif = false;
@@ -109,6 +117,70 @@ bool lineMoveVerif(int** boardIn, int xIn, int yIn, int xOut, int yOut)
                 if (boardIn[i][xOut] != HOLLOW)
                 {
                     printf("There is a piece in the path of your Y move\n");
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    printf("You tried to move from (%d,%d) to (%d,%d), it is not possible with your piece.\n", xIn, yIn, xOut, yOut);
+    return false;
+}
+
+bool diagMoveVerif(int** boardIn, int xIn, int yIn, int xOut, int yOut)
+{
+    int distanceX = xOut - xIn;
+    int distanceY = yOut - yIn;
+
+    if(abs(distanceX) == abs(distanceY))
+    {
+        if ((distanceX>0)&&(distanceY>0))
+        {
+            for(int i = 1; i<abs(distanceX); i++)
+            {
+                if(boardIn[yIn+i][xIn+i]!=HOLLOW)
+                {
+                    printf("There is a piece in the path of your move\n");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        else if ((distanceX>0)&&(distanceY<0))
+        {
+            for(int i = 1; i<abs(distanceX); i++)
+            {
+                if(boardIn[yIn-i][xIn+i]!=HOLLOW)
+                {
+                    printf("There is a piece in the path of your move\n");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        else if ((distanceX<0)&&(distanceY>0))
+        {
+            for(int i = 1; i<abs(distanceX); i++)
+            {
+                if(boardIn[yIn+i][xIn-i]!=HOLLOW)
+                {
+                    printf("There is a piece in the path of your move\n");
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        else if ((distanceX<0)&&(distanceY<0))
+        {
+            for(int i = 1; i<abs(distanceX); i++)
+            {
+                if(boardIn[yIn-i][xIn-i]!=HOLLOW)
+                {
+                    printf("There is a piece in the path of your move\n");
                     return false;
                 }
             }
@@ -228,6 +300,26 @@ bool movementRook(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
     }
 
     printf("You tried to move from (%d,%d) to (%d,%d), it is not possible with a rook.\n", xIn, yIn, xOut, yOut);
+    return false;
+}
+
+bool movementBishop(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
+{
+    if(!validDemand(boardIn, xIn, yIn, xOut, yOut, side))
+    {
+        printf("Your request is impossible.\n");
+        return false;
+    }
+
+    // Check if you have a piece in your path
+    if(diagMoveVerif(boardIn, xIn, yIn, xOut, yOut) == true)
+    {
+        boardIn[yOut][xOut] = boardIn[yIn][xIn];
+        boardIn[yIn][xIn] = HOLLOW;
+        return true;
+    }
+
+    printf("You tried to move from (%d,%d) to (%d,%d), it is not possible with a bishop.\n", xIn, yIn, xOut, yOut);
     return false;
 }
 

@@ -14,5 +14,14 @@ int main()
     int** board = boardInit();
     boardPrint(board);
 
+    board[1][3] = HOLLOW;
+    boardPrint(board);
+
+    pieceMovement(board, 2, 0, 4, 2);
+    boardPrint(board);
+
+    pieceMovement(board, 4, 2, 0, 6);
+    boardPrint(board);
+
     return 0;
 }
