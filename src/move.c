@@ -39,6 +39,11 @@ bool pieceMovement(int** boardIn, int xIn, int yIn, int xOut, int yOut)
             moveVerif = movementKing(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
             break;
 
+        case W_QUEEN:
+        case B_QUEEN:
+            moveVerif = movementQueen(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
+            break;
+
         default:
             moveVerif = false;
             break;
@@ -127,8 +132,6 @@ bool lineMoveVerif(int** boardIn, int xIn, int yIn, int xOut, int yOut)
             return true;
         }
     }
-
-    printf("You tried to move from (%d,%d) to (%d,%d), it is not possible with your piece.\n", xIn, yIn, xOut, yOut);
     return false;
 }
 
@@ -191,8 +194,6 @@ bool diagMoveVerif(int** boardIn, int xIn, int yIn, int xOut, int yOut)
             return true;
         }
     }
-
-    printf("You tried to move from (%d,%d) to (%d,%d), it is not possible with your piece.\n", xIn, yIn, xOut, yOut);
     return false;
 }
 
@@ -311,7 +312,7 @@ bool movementBishop(int** boardIn, int xIn, int yIn, int xOut, int yOut, int sid
 {
     if(!validDemand(boardIn, xIn, yIn, xOut, yOut, side))
     {
-        printf("Your request is impossible.\n");
+        printf("Your request is impossible with your bishop.\n");
         return false;
     }
 
@@ -347,6 +348,26 @@ bool movementKnight(int** boardIn, int xIn, int yIn, int xOut, int yOut, int sid
     }
 
     printf("You tried to move from (%d,%d) to (%d,%d), it is not possible with a knight.\n", xIn, yIn, xOut, yOut);
+    return false;
+}
+
+bool movementQueen(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
+{
+    if(!validDemand(boardIn, xIn, yIn, xOut, yOut, side))
+    {
+        printf("Your request is impossible with your queen.\n");
+        return false;
+    }
+
+    // Check if you have a piece in your path
+    if((diagMoveVerif(boardIn, xIn, yIn, xOut, yOut)||lineMoveVerif(boardIn, xIn, yIn, xOut, yOut))== true)
+    {
+        boardIn[yOut][xOut] = boardIn[yIn][xIn];
+        boardIn[yIn][xIn] = HOLLOW;
+        return true;
+    }
+
+    printf("You tried to move from (%d,%d) to (%d,%d), it is not possible with a queen.\n", xIn, yIn, xOut, yOut);
     return false;
 }
 
