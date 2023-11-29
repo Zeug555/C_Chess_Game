@@ -7,7 +7,6 @@ Title: game.c
 
 #include "game.h"
 
-
 bool startGame()
 {
     char response = 0;
@@ -42,24 +41,32 @@ bool startGame()
 
 void gameGlobal()
 {
+    // Variable init
     int turn;
     int **board;
     char checkmateOrQuit;
 
+    // Game introduction
     bool response  = startGame();
+
+    // If the user want to start a game
     if(response)
     {
         char restart = 'y';
+        // Restart while the user says "yes"
         while(restart == 'y')
         {
-            turn = 0;
+            turn = 0; // Initialise the turn number to zero
+            board = boardInit(); // Initialise the board
             printf("Ok, lezgo !\n");
-            board = boardInit();
+
+            // The game work while there is no checkmate or a player that exit the game
             while((checkmateOrQuit!='c')||checkmateOrQuit!='q')
             {
                 checkmateOrQuit = playTurn(&turn);
             }
             
+            // Restart ?
             if(checkmateOrQuit == 'q')
             {
                 printf("You quit your game, do you want to restart one ?\n");
@@ -67,7 +74,7 @@ void gameGlobal()
                 scanf(" %c", &restart);
             }
 
-            if(checkmateOrQuit == 'c')
+            else if(checkmateOrQuit == 'c')
             {
                 printf("Your game is finished, do you want to restart one ?\n");
                 printf("y -> Yes, n -> No : ");
@@ -76,6 +83,7 @@ void gameGlobal()
         }
     }
 
+    // Game exit
     printf("\n No problem byebye !\n");
     return;
 }

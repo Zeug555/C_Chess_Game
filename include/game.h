@@ -9,6 +9,7 @@ Title: game.h
 #include "game.h"
 #include "move.h"
 
+// Manage the core of the game
 bool startGame();
 void gameGlobal();
 char playTurn(int *adrTurn);
