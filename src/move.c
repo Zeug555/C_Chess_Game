@@ -22,18 +22,22 @@ bool pieceMovement(int** boardIn, int xIn, int yIn, int xOut, int yOut)
         case W_ROOK:
         case B_ROOK:
             moveVerif = movementRook(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
+            break;
         
         case W_BISHOP:
         case B_BISHOP:
             moveVerif = movementBishop(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
+            break;
 
         case W_KNIGHT:
         case B_KNIGHT:
             moveVerif = movementKnight(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
+            break;
 
         case W_KING:
         case B_KING:
             moveVerif = movementKing(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
+            break;
 
         default:
             moveVerif = false;
@@ -196,7 +200,7 @@ bool movementPawn(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
 {
     if(!validDemand(boardIn, xIn, yIn, xOut, yOut, side))
     {
-        printf("Your request is impossible.\n");
+        printf("Your request is impossible for your Pawn.\n");
         return false;
     }
 
@@ -287,7 +291,7 @@ bool movementRook(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
 {
     if(!validDemand(boardIn, xIn, yIn, xOut, yOut, side))
     {
-        printf("Your request is impossible.\n");
+        printf("Your request is impossible for your Rook.\n");
         return false;
     }
 
@@ -327,7 +331,7 @@ bool movementKnight(int** boardIn, int xIn, int yIn, int xOut, int yOut, int sid
 {
     if(!validDemand(boardIn, xIn, yIn, xOut, yOut, side))
     {
-        printf("Your request is impossible.\n");
+        printf("Your request is impossible for your knight.\n");
         return false;
     }
 
@@ -350,7 +354,7 @@ bool movementKing(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
 {
     if(!validDemand(boardIn, xIn, yIn, xOut, yOut, side))
     {
-        printf("Your request is impossible.\n");
+        printf("Your request is impossible for your king.\n");
         return false;
     }
 
