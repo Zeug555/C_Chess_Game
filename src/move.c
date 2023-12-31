@@ -1,47 +1,54 @@
 /*
 Author: Lïam LOTTE
 Creation Date: 27/11/2023
-Last Update: 28/11/2023
+Last Update: 29/11/2023
 Title: move.c
 */
 
 #include "move.h"
 
-bool pieceMovement(int** boardIn, int xIn, int yIn, int xOut, int yOut)
+bool pieceMovement(int** boardIn, int *adrTurn, int xIn, int yIn, int xOut, int yOut)
 {
     bool moveVerif;
     int currentPiece = boardIn[yIn][xIn];
+    int side =  (*adrTurn)%2;
+
+    if((boardIn[yIn][xIn]%2 != side)||(boardIn[yIn][xIn]==0))
+    {
+        printf("The chosen piece is not at you\n");
+        return false;
+    }
 
     switch (currentPiece)
     {
         case W_PAWN:
         case B_PAWN:
-            moveVerif = movementPawn(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
+            moveVerif = movementPawn(boardIn, xIn, yIn, xOut, yOut, side);
             break;
 
         case W_ROOK:
         case B_ROOK:
-            moveVerif = movementRook(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
+            moveVerif = movementRook(boardIn, xIn, yIn, xOut, yOut, side);
             break;
         
         case W_BISHOP:
         case B_BISHOP:
-            moveVerif = movementBishop(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
+            moveVerif = movementBishop(boardIn, xIn, yIn, xOut, yOut, side);
             break;
 
         case W_KNIGHT:
         case B_KNIGHT:
-            moveVerif = movementKnight(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
+            moveVerif = movementKnight(boardIn, xIn, yIn, xOut, yOut, side);
             break;
 
         case W_KING:
         case B_KING:
-            moveVerif = movementKing(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
+            moveVerif = movementKing(boardIn, xIn, yIn, xOut, yOut, side);
             break;
 
         case W_QUEEN:
         case B_QUEEN:
-            moveVerif = movementQueen(boardIn, xIn, yIn, xOut, yOut, currentPiece%2);
+            moveVerif = movementQueen(boardIn, xIn, yIn, xOut, yOut, side);
             break;
 
         default:
@@ -56,13 +63,24 @@ bool validDemand(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
 {
     // Board limits verification
     if((xOut>7)||(yOut>7)||(xOut<0)||(yOut<0))
+    {
+        printf("You tried to move your piece out of the map.\n");
         return false;
+    }    
     else if((xIn>7)||(yIn>7)||(xIn<0)||(yIn<0))
+    {
+        printf("You tried to move a piece which is out of the board (this is not possible)\n");
         return false;
-
+    }
     // Friend smash verification
-    if(boardIn[yOut][xOut]%2 == side)
-        return false;
+    if(boardIn[yOut][xOut] != 0)
+    {
+        if(boardIn[yOut][xOut]%2 == side)
+        {
+            printf("You tried to smash a friend !\n");
+            return false;
+        }
+    }
 
     return true;
 }
@@ -330,11 +348,6 @@ bool movementBishop(int** boardIn, int xIn, int yIn, int xOut, int yOut, int sid
 
 bool movementKnight(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side)
 {
-    if(!validDemand(boardIn, xIn, yIn, xOut, yOut, side))
-    {
-        printf("Your request is impossible for your knight.\n");
-        return false;
-    }
 
     int distanceX = abs(xIn - xOut);
     int distanceY = abs(yIn - yOut);

@@ -8,11 +8,10 @@ Title : main.c
 #include <stdio.h>
 #include "board.h"
 #include "move.h"
+#include "game.h"
 
 int main()
 {
-    int** board = boardInit();
-    boardPrint(board);
-
+    gameGlobal();
     return 0;
 }
