@@ -26,7 +26,8 @@ bool startGame()
     {
         printf("Do you want to start the game ?\n");
         printf("y -> Yes, n -> No : ");
-        scanf(" %c", &response);
+        scanf(" %1c", &response); 
+        // To upgrade in the future, if the user put more than a char, it repeat the error message too much (one letter == one message)
 
         if(response == 'y')
             return true;
@@ -35,7 +36,7 @@ bool startGame()
             return false;
         }
         
-        printf("\n Hmmm ? I don't understand... can you repeat please ? ");
+        printf("\nHmmm ? I don't understand... can you repeat please ? ");
     }
 }
 
@@ -56,27 +57,28 @@ void gameGlobal()
         // Restart while the user says "yes"
         while(restart == 'y')
         {
+            checkmateOrQuit = 'u';
             turn = 0; // Initialise the turn number to zero
             board = boardInit(); // Initialise the board
             printf("Ok, lezgo !\n");
 
             // The game work while there is no checkmate or a player that exit the game
-            while((checkmateOrQuit!='c')||checkmateOrQuit!='q')
+            while(checkmateOrQuit=='u')
             {
-                checkmateOrQuit = playTurn(&turn);
+                checkmateOrQuit = playTurn(board, &turn);
             }
             
             // Restart ?
             if(checkmateOrQuit == 'q')
             {
-                printf("You quit your game, do you want to restart one ?\n");
+                printf("\nYou quit your game, do you want to restart one ?\n");
                 printf("y -> Yes, n -> No : ");
                 scanf(" %c", &restart);
             }
 
             else if(checkmateOrQuit == 'c')
             {
-                printf("Your game is finished, do you want to restart one ?\n");
+                printf("\nYour game is finished, do you want to restart one ?\n");
                 printf("y -> Yes, n -> No : ");
                 scanf(" %c", &restart);
             }
@@ -84,6 +86,55 @@ void gameGlobal()
     }
 
     // Game exit
-    printf("\n No problem byebye !\n");
+    printf("\nNo problem byebye !\n");
     return;
+}
+
+char playTurn(int **boardIn, int *adrTurn)
+{
+    int xIn; 
+    int yIn;
+    int xOut; 
+    int yOut;
+    int choice;
+    bool successMov;
+
+    if(*adrTurn%2 == 0)
+    {
+        printf("\nHi white player ! What do you want to do ? \n");
+    }
+    else
+    {
+        printf("\nHi black player ! What do you want to do ?\n");
+    }
+
+    do{
+        printf("\n1 - Play !\n");
+        printf("2 - Quit !\n\n");
+
+        scanf(" %d", &choice);
+    }while ((choice != 1)&&(choice != 2));
+
+    if(choice == 1)
+    {
+        printf("\n");
+        boardPrint(boardIn);
+
+        do
+        {
+            printf("Choose your piece to move ! : ");
+            scanf("%d %d", &xIn, &yIn);
+            printf("Where do you want to move it ? : ");
+            scanf("%d %d", &xOut, &yOut);
+            successMov =  pieceMovement(boardIn, adrTurn, xIn, yIn, xOut, yOut);
+        } while (successMov == false);
+
+        return 'u'; //as unfinished
+    }
+
+    else if (choice == 2)
+    {
+        (*adrTurn)++;
+        return 'q';
+    }
 }

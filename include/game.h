@@ -12,4 +12,4 @@ Title: game.h
 // Manage the core of the game
 bool startGame();
 void gameGlobal();
-char playTurn(int *adrTurn);
+char playTurn(int **boardIn, int *adrTurn);

@@ -11,7 +11,7 @@ Title: move.h
 #include "board.h"
 
 // Global pieces gestion
-bool pieceMovement(int** boardIn, int xIn, int yIn, int xOut, int yOut);
+bool pieceMovement(int** boardIn, int* adrTurn, int xIn, int yIn, int xOut, int yOut);
 
 // Manage weird players things
 bool validDemand(int** boardIn, int xIn, int yIn, int xOut, int yOut, int side);
