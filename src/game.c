@@ -111,7 +111,6 @@ char playTurn(int **boardIn, int *adrTurn)
     do{
         printf("\n1 - Play !\n");
         printf("2 - Quit !\n\n");
-
         scanf(" %d", &choice);
     }while ((choice != 1)&&(choice != 2));
 
@@ -129,6 +128,7 @@ char playTurn(int **boardIn, int *adrTurn)
             successMov =  pieceMovement(boardIn, adrTurn, xIn, yIn, xOut, yOut);
         } while (successMov == false);
 
+        (*adrTurn)++;
         return 'u'; //as unfinished
     }
 
@@ -137,4 +137,14 @@ char playTurn(int **boardIn, int *adrTurn)
         (*adrTurn)++;
         return 'q';
     }
+}
+
+bool verifCheckmate(int **boardIn, int *adrTurn)
+{
+
+}
+
+int* kingPosition(int **boardIn, int *adrTurn)
+{
+    
 }

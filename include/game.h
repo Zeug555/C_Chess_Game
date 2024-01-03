@@ -13,3 +13,5 @@ Title: game.h
 bool startGame();
 void gameGlobal();
 char playTurn(int **boardIn, int *adrTurn);
+bool verifCheckmate(int **boardIn, int *adrTurn);
+int* kingPosition(int **boardIn, int *adrTurn);1
